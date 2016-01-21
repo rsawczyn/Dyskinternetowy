@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.ServletContext;
@@ -87,36 +88,14 @@ public class HomeController
 		public String RegisterPost(@ModelAttribute("User") User user,
 			BindingResult result, Model model) 
 	{
-		boolean Valid = true;
-		if(!(user.getImie().length() >0))
+		Map<String,String> Errors = uservice.validateRegisterForm(user);
+		if(Errors.containsKey("Invalid"))
 		{
-			Valid= false;
-			model.addAttribute("ImieError","Imie Puste");
-		}
-		if(!(user.getNazwisko().length() >0))
-		{
-			Valid= false;
-			model.addAttribute("NazwiskoError","Nazwisko Puste");
-		}
-		if(!(user.getHaslo().length() >0))
-		{
-			Valid= false;
-			model.addAttribute("HasloError","Haslo Puste");
-		}
-		if(!(user.getLogin().length() >0))
-		{
-			Valid= false;
-			model.addAttribute("LoginError","Login Pusty lub Istnieje");
-		}
-		if(!(user.getEmail().length() >0))
-		{
-			Valid= false;
-			model.addAttribute("EmailError","Niepoprawny Email");
-			model.addAttribute("InValid", Valid);
-		}
-		if(!Valid)
-		{
-			model.addAttribute("User",user); 
+			for(Map.Entry<String,String>var:Errors.entrySet())
+			{
+				model.addAttribute(var.getKey(),var.getValue());
+			}
+			model.addAttribute("User", user);
 			return "register";
 		}
 		else

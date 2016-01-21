@@ -1,6 +1,9 @@
 package org.zut.dyskService;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,10 +59,41 @@ public class UserServiceImpl implements UserService
 	}
 
 	@Override	
-	public boolean validateRegisterForm(User u) 
+	public Map<String,String> validateRegisterForm(User user) 
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Map<String,String> Err = new HashMap<String,String>();
+		boolean Valid = true;
+		if(!(user.getImie().length() >0))
+		{
+			Valid= false;
+			Err.put("ImieError","Imie Puste");
+		}
+		if(!(user.getNazwisko().length() >0))
+		{
+			Valid= false;
+			Err.put("NazwiskoError","Nazwisko Puste");
+		}
+		if(!(user.getHaslo().length() >0))
+		{
+			Valid= false;
+			Err.put("HasloError","Haslo Puste");
+		}
+		if(!(user.getLogin().length() >0))
+		{
+			Valid= false;
+			Err.put("LoginError","Login Pusty lub Istnieje");
+		}
+		if(!(user.getEmail().length() >0))
+		{
+			Valid= false;
+			Err.put("EmailError","Niepoprawny Email");
+			
+		}
+		if(Valid == false)
+		{
+			Err.put("Invalid","yes");
+		}
+		return Err;
 	}
 
 	@Override

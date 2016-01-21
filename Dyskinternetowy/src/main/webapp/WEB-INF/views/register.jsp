@@ -46,12 +46,12 @@
 	
 	<div id="zawartosc">
 		<div align="center">
-			<% if(request.getAttribute("InValid")!=null || request.getMethod() == "GET"){
+			<% if(request.getAttribute("Invalid")!=null || request.getMethod() == "GET"){
 			%>
 			<form:form method="post" commandName="User">
 				<table border="0">
 	                <tr>
-	                    <td colspan="2" align="center"><h2>Spring MVC Form Demo - Registration</h2></td>
+	                    <td colspan="2" align="center"><h2>Rejestracja</h2></td>
 	                </tr>
 	                <tr>
 	                    <td>Imie:</td>
