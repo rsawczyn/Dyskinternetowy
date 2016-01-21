@@ -31,6 +31,7 @@ public class AuthManager implements AuthenticationManager
 	
 			String Login = authentication.getName();
 			String Pass = authentication.getCredentials().toString();
+			if(Login.length() == 0 || Pass.length() == 0) return null;
 			if(userservice.Authorize(Login, Pass))
 			{
 				List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
@@ -39,7 +40,7 @@ public class AuthManager implements AuthenticationManager
 			}
 			else
 			{
-				throw new BadCredentialsException("Invalid Login Data");
+				return null;
 			}
 		
 		

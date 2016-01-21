@@ -3,6 +3,7 @@ package org.zut.dyskDAO;
 import javax.sql.DataSource;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.zut.dyskDomain.User;
 import org.zut.dyskDomain.UserMapper;
@@ -54,10 +55,19 @@ public class UserDaoImpl implements UserDAO
 	@Override
 	public User getUser(String UserName) 
 	{
-		String SQL = "select * from User where Login = ?";
-	    User user = jdbcTemplate.queryForObject(SQL,new Object[]{UserName}, new UserMapper());
+		try
+		{
+			String SQL = "select * from User where Login = ?";
+		    User user = jdbcTemplate.queryForObject(SQL,new Object[]{UserName}, new UserMapper());
+		    return user;
 		// TODO Auto-generated method stub
-		return user;
+		}
+		catch(EmptyResultDataAccessException e)
+		{
+			return null;
+		}
+	   
+		
 	}
 
 	@Override

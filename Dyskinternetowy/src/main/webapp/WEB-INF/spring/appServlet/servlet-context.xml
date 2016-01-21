@@ -31,29 +31,36 @@
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="" />
 	</beans:bean>
+	
 	<beans:bean id="userdao" class="org.zut.dyskDAO.UserDaoImpl">
 		<beans:property name="data" ref="datasource"></beans:property>
 	</beans:bean>
+	
 	<beans:bean id="userService" class="org.zut.dyskService.UserServiceImpl">
-		<beans:property name="userDao" ref="userdao"></beans:property>
-		<beans:property name="usersResPath" value="classpath:/users"></beans:property>
+		<beans:property name="userDao" ref="userdao"></beans:property>	
+		<beans:property name="userDirBasicPath" value="${BasicPath}"></beans:property>	
 	</beans:bean>
+	
+	<beans:bean id="fileService" class="org.zut.dyskService.FileServiceImpl">
+		<beans:property name="userBasicDirPath" value="${BasicPath}"></beans:property> <!-- Zmienna z basic.properties -->
+	</beans:bean>
+	
 	<beans:bean id="MyAuth" class="org.zut.dysk.config.MyAuthProvider">
 		<beans:property name="userservice" ref="userService"></beans:property>
 	</beans:bean>
+	
 	<beans:bean id="MyAuthManager" class="org.zut.dysk.config.AuthManager">
 		<beans:property name="userservice" ref="userService"></beans:property>
 	</beans:bean>
+	
 	<beans:bean id="AuthSuccessHandler" class="org.zut.dysk.config.LoginSuccessHandler">
 	</beans:bean>
 	
-	<http  auto-config="true" authentication-manager-ref="MyAuthManager">		
-		<form-login login-page="/"  
-		
-		authentication-failure-url="/?loginErr=yes" 
+	<http  authentication-manager-ref="MyAuthManager">		
+		<form-login login-page="/"  		
+		authentication-failure-url="/?loginErr=yes" 		
 		username-parameter="Login"
-		password-parameter="Haslo" 
-		
+		password-parameter="Haslo" 		
 		authentication-success-handler-ref="AuthSuccessHandler"
 		/>
 	 	<logout logout-success-url="/?logoutOk" logout-url="/exit"/> 
@@ -63,5 +70,5 @@
  	<context:annotation-config/>
  	<global-method-security pre-post-annotations="enabled" jsr250-annotations="enabled" />
 	<context:component-scan base-package="org.zut.dysk,org.zut.dyskDAO,org.zut.dyskService,org.zut.dyskDomain,org.zut.dysk.config" />
-	
+	<context:property-placeholder location="resources/basic.properties"/>
 </beans:beans>

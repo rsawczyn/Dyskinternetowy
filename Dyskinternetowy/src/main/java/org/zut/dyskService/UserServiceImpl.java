@@ -1,6 +1,7 @@
 package org.zut.dyskService;
 
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,14 +14,14 @@ import org.zut.dyskDomain.User;
 public class UserServiceImpl implements UserService
 {
 	private UserDaoImpl userDao;
-	private String UsersResPath;
 	
-	public void setUsersResPath(String usersResPath) {
-		UsersResPath = usersResPath;
-	}
-
 	public void setUserDao(UserDaoImpl userDao) {
 		this.userDao = userDao;
+	}
+	private String UserDirBasicPath;
+	
+	public void setUserDirBasicPath(String userDirBasicPath) {
+		UserDirBasicPath = userDirBasicPath;
 	}
 
 	@Override
@@ -31,6 +32,12 @@ public class UserServiceImpl implements UserService
 		if(count>0)return false;
 		boolean result =  userDao.addUser(u);
 		//Create User DIR at resources/users/user_login		
+		File f = new File(UserDirBasicPath + u.getLogin());
+		f.mkdir(); // Mkdir /ServerUsers/....Logi_ Name
+		File fpublic = new File(UserDirBasicPath+u.getLogin()+"/public");
+		fpublic.mkdir();
+		File fprivate = new File(UserDirBasicPath+u.getLogin()+"/private");
+		fprivate.mkdir();
 		return true ;
 	}
 
@@ -61,6 +68,7 @@ public class UserServiceImpl implements UserService
 	@Override	
 	public Map<String,String> validateRegisterForm(User user) 
 	{
+		
 		Map<String,String> Err = new HashMap<String,String>();
 		boolean Valid = true;
 		if(!(user.getImie().length() >0))
@@ -100,6 +108,7 @@ public class UserServiceImpl implements UserService
 	public boolean Authorize(String Login, String Haslo) 
 	{
 		User u = userDao.getUser(Login);
+		if(u == null)return false;
 		if(u.getHaslo().equals(Haslo))return true;
 		else return false;
 	}

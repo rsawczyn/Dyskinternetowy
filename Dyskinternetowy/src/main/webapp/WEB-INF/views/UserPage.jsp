@@ -12,7 +12,7 @@
 <div id="strona">
 
 	<div id="naglowek">
-	nagwek
+		<img id="LogoDIV" src="${pageContext.request.contextPath}/resources/Images/file-server-300px.png" alt="Logo">
 	</div>
 	
 	<div id="menu_1">
@@ -50,9 +50,7 @@
 		<div align="center">
 			<a href="/dysk/exit" >Wyloguj</a>
 			<hr>
-			<form action="logout" method="GET">
-				<input type="submit" value="Wyloguj" />
-			</form>
+			
 		</div>
 	</div>
 	<div id="stopka">

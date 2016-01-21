@@ -67,6 +67,7 @@ public class UserController
 	@RequestMapping(value = "/{Login}/public", method = RequestMethod.GET)
 	public String Public(Model model,@PathVariable String Login)
 	{
+	
 		// Tylko folder publiczny , nazwa loginu z Path Variable
 		System.out.println("Login in Path = "+Login);
 		return "UserPage";

@@ -57,7 +57,7 @@ public class HomeController
 	@RequestMapping(value = "/", method = RequestMethod.GET)	
 	public String home( Model model) 
 	{
-		//if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) return"forward:/user/";
+		
 		User u = new User();		
 		model.addAttribute("User",u);
 		return "login";

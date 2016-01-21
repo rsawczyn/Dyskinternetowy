@@ -12,7 +12,7 @@
 <div id="strona">
 
 	<div id="naglowek">
-	nagwek
+		<img id="LogoDIV" src="${pageContext.request.contextPath}/resources/Images/file-server-300px.png" alt="Logo">
 	</div>
 	
 	<div id="menu_1">
