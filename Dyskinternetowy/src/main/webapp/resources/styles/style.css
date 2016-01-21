@@ -1,0 +1,61 @@
+html, body
+{
+	background-color: #dadada;
+	color: #000000;
+	margin-top: 10px;
+	font-family: 'Trebuchet MS', Arial, sans-serif;
+}
+div#strona
+{
+	width: 1370px;
+	margin: 0 auto;
+	padding: 10px;
+	background-color: #ffd2ff;
+}
+div#naglowek
+{
+	height: 100px;
+	padding: 10px;
+	margin-bottom: 4px;
+	background-color: #7b327b;
+	color: #ffffff;
+}
+div#menu_1
+{
+	width: 150px;
+	float: left;
+	overflow: hidden;
+	padding: 10px;
+	background-color: #cb78cb;
+}
+div#menu_1 ul
+{
+	list-style-type: none;
+}
+div#menu_2
+{
+	width: 150px;
+	float: right;
+	overflow: hidden;
+	padding: 10px;
+	background-color: #df8cdf;
+}
+div#menu_2 ul
+{
+	list-style-type: none;
+}
+
+div#zawartosc
+{
+	overflow: hidden;
+	padding: 20px;
+	background-color: #ffbeff;
+}
+div#stopka
+{
+	clear: both;
+	padding: 10px;
+	background-color: #8f468f;
+	color: #ffffff;
+}
+
