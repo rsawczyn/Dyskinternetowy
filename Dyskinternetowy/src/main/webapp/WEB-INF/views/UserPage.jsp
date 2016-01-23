@@ -50,8 +50,18 @@
 		<div align="center">
 			<a href="/dysk/exit" >Wyloguj</a>
 			<hr>
-			
+			<table>
+				<tr>
+					<td><a href="/dysk/user/${user.getLogin()}/public">${pub.getNazwa()}</a></td>
+				    <td><a href="/dysk/user/${user.getLogin()}/private">${priv.getNazwa()}</a></td>
+				 </tr>
+			</table>
 		</div>
 	</div>
 	<div id="stopka">
-	stop
+	stopka
+	</div>
+</div>
+</body>
+
+</html>

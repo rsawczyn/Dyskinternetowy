@@ -10,7 +10,7 @@
 <div id="strona">
 
 	<div id="naglowek">
-	nagwek
+		<img id="LogoDIV" src="${pageContext.request.contextPath}/resources/Images/file-server-300px.png" alt="Logo" >
 	</div>
 	
 	<div id="menu_1">
@@ -45,74 +45,76 @@
 	</div>
 	
 	<div id="zawartosc">
-		<% if(request.getAttribute("InValid")!=null || request.getMethod() == "GET"){
-		%>
-		<form:form method="post" commandName="User">
-			<table border="0">
-                <tr>
-                    <td colspan="2" align="center"><h2>Spring MVC Form Demo - Registration</h2></td>
-                </tr>
-                <tr>
-                    <td>Imie:</td>
-                    <td><form:input path="Imie" /><%if(request.getAttribute("ImieError")!=null){%>
-                    <p>${ImieError }</p>
-                    <%} %></td>
-                </tr>
-                <tr>
-                    <td>Nazwisko:</td>
-                    <td><form:input path="Nazwisko" /><%if(request.getAttribute("NazwiskoError")!=null){%>
-                    <p>${NazwiskoError }</p>
-                    <%} %></td>
-                </tr>
-                <tr>
-                    <td>User Name:</td>
-                    <td><form:input path="Login" /><%if(request.getAttribute("LoginError")!=null){%>
-                    <p>${LoginError }</p>
-                    <%} %></td>
-                </tr>
-                <tr>
-                    <td>Password:</td>
-                    <td><form:password path="Haslo" /> <%if(request.getAttribute("HasloError")!=null){%>
-                    <p>${HasloError }</p>
-                    <%} %>
-                    </td>
-                </tr>
-                <tr>
-                    <td>E-mail:</td>
-                    <td><form:input path="Email" /><%if(request.getAttribute("EmailError")!=null){%>
-                    <p>${EmailError }</p>
-                    <%} %></td>
-                   
-                </tr>             
-              
-                <tr>
-                    <td colspan="2" align="center"><input type="submit" value="Register" /></td>
-                </tr>
-            </table>		
-		</form:form>
-		<%}
-		else if(request.getMethod() == "POST" && request.getAttribute("InValid")==null)
-		{%>
-		<p>${message }</p>
-		<form:form method="post" action="login" commandName="UserLoginAtt">
-			<table border="0">
-	        	<tr>
-                    <td colspan="2" align="center"><h2>Logowanie!</h2></td>
-                </tr>
-                <tr>
-                    <td>User Name:</td>
-                    <td><form:input path="Login" /></td>
-                </tr>
-                <tr>
-                    <td>Password:</td>
-                    <td><form:password path="Haslo" /></td>
-                </tr>          
-                <tr>
-                    <td colspan="2" align="center"><input type="submit" value="Zaloguj" /></td>
-                </tr>
-	        </table>
-		</form:form>
-		<%} %>
+		<div align="center">
+			<% if(request.getAttribute("Invalid")!=null || request.getMethod() == "GET"){
+			%>
+			<form:form method="post" commandName="User">
+				<table border="0">
+	                <tr>
+	                    <td colspan="2" align="center"><h2>Rejestracja</h2></td>
+	                </tr>
+	                <tr>
+	                    <td>Imie:</td>
+	                    <td><form:input path="Imie" /><%if(request.getAttribute("ImieError")!=null){%>
+	                    <p>${ImieError }</p>
+	                    <%} %></td>
+	                </tr>
+	                <tr>
+	                    <td>Nazwisko:</td>
+	                    <td><form:input path="Nazwisko" /><%if(request.getAttribute("NazwiskoError")!=null){%>
+	                    <p>${NazwiskoError }</p>
+	                    <%} %></td>
+	                </tr>
+	                <tr>
+	                    <td>User Name:</td>
+	                    <td><form:input path="Login" /><%if(request.getAttribute("LoginError")!=null){%>
+	                    <p>${LoginError }</p>
+	                    <%} %></td>
+	                </tr>
+	                <tr>
+	                    <td>Password:</td>
+	                    <td><form:password path="Haslo" /> <%if(request.getAttribute("HasloError")!=null){%>
+	                    <p>${HasloError }</p>
+	                    <%} %>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>E-mail:</td>
+	                    <td><form:input path="Email" /><%if(request.getAttribute("EmailError")!=null){%>
+	                    <p>${EmailError }</p>
+	                    <%} %></td>
+	                   
+	                </tr>             
+	              
+	                <tr>
+	                    <td colspan="2" align="center"><input type="submit" value="Register" /></td>
+	                </tr>
+	            </table>		
+			</form:form>
+			<%}
+			else if(request.getMethod() == "POST" && request.getAttribute("InValid")==null)
+			{%>
+			<p>${message }</p>
+			<form:form method="post" action="login" commandName="UserLoginAtt">
+				<table border="0">
+		        	<tr>
+	                    <td colspan="2" align="center"><h2>Logowanie!</h2></td>
+	                </tr>
+	                <tr>
+	                    <td>User Name:</td>
+	                    <td><form:input path="Login" /></td>
+	                </tr>
+	                <tr>
+	                    <td>Password:</td>
+	                    <td><form:password path="Haslo" /></td>
+	                </tr>          
+	                <tr>
+	                    <td colspan="2" align="center"><input type="submit" value="Zaloguj" /></td>
+	                </tr>
+		        </table>
+			</form:form>
+			<%} %>
+		</div>
 		
 	</div>
 	<div id="stopka">
