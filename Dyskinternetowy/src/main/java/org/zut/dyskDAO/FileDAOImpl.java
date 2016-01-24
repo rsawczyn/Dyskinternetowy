@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.zut.dyskDomain.File;
 import org.zut.dyskDomain.FileMapper;
@@ -24,14 +25,27 @@ public class FileDAOImpl implements FileDAO {
 	@Override
 	public List<File> getFiles(User user, String location) {
 		String SQL = "select * from plik where Wlasciciel = ? AND Lokalizacja = ?";
-		List<File> files = jdbcTemplate.query(SQL,new Object[]{user.getId(), location}, new FileMapper());
+		List<File> files;
+		try {
+			files= jdbcTemplate.query(SQL,new Object[]{user.getId(), location}, new FileMapper());
+		}
+		catch(EmptyResultDataAccessException e) {
+			return null;
+		}
 		return files;
 	}
 
 	@Override
 	public File getFile(User user, int id, String location) {
-		// TODO Auto-generated method stub
-		return null;
+		String SQL = "select * from plik where Id = ? AND Wlasciciel = ? AND Lokalizacja = ?";
+		File file;
+	//	try {
+			file = jdbcTemplate.queryForObject(SQL,new Object[]{id, user.getId(), location}, new FileMapper());
+	//	}
+	/*	catch(EmptyResultDataAccessException e) {
+			return null;
+		} */
+		return file;
 	}
 	@Override
 	public boolean addFile(User user, File file){

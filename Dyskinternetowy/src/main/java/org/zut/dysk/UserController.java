@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.zut.dyskDomain.File;
 import org.zut.dyskDomain.User;
 import org.zut.dyskService.FileServiceImpl;
@@ -46,7 +47,8 @@ public class UserController
 		String Login = principal.getName(); // principal ma nazwê Login u¿ytkownika zalogowanego
 		System.out.println("Principal name = " + principal.getName()); // Wyœwietl login w konsoli
 		User user = uservice.getUser(principal.getName());
-		List<File> files = fservice.getFiles(user, user.getLogin());
+		fservice.setCurrDir(user.getLogin());
+		List<File> files = fservice.getFiles(user, user.getLogin()+"/");
 		File pub = files.get(0);
 		File priv = files.get(1);
 		for(File f : files){
@@ -75,6 +77,7 @@ public class UserController
 	@RequestMapping(value = "/delFile", method = RequestMethod.POST)
 	public String deleteFile(Model model,Principal pricinpal)
 	{
+		fservice.getCurrDir();
 		// Loginy na podstawie Autoryzacji(Principal)
 		String Login = pricinpal.getName();
 		return "UserPage";
@@ -93,23 +96,83 @@ public class UserController
 	
 	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
 	@RequestMapping(value = "/{Login}/public", method = RequestMethod.GET)
-	public String Public(Model model,@PathVariable String Login)
+	public String Public(Model model,@PathVariable String Login, @RequestParam("currDir") String currDir,
+			@RequestParam("nextDir") String nextDir, @RequestParam("fileId") int fileId)
 	{
 		User user = uservice.getUser(Login);
-		List<File> files = fservice.getFiles(user, user.getLogin());
+		List<File> files= null;
+		System.out.println("CurrDir: " +currDir);
+		System.out.println("NextDir: " +nextDir);
+		System.out.println("FileId: " +fileId);
+		System.out.println("UserId: " +user.getId());
+		File file =fservice.getFile(user, fileId, currDir);
+		// jezeli jest plikiem
+		if( file.isFolder() == false){
+			// TODO wyswietlic dane pliku
+		}
+		else {
+			// jezeli jestesmy w nastepnym katalogu
+			if(nextDir != null) {
+				/*fservice.setCurrDir(fservice.getCurrDir().concat(nextDir));
+				files = fservice.getFiles(user, fservice.getCurrDir()); */
+				currDir += nextDir+"/";
+				System.out.println("CurrDir: " +currDir);
+				files = fservice.getFiles(user, currDir);	
+				for(File f : files){
+					System.out.println("File name: " +f.getNazwa());
+				}
+			}
+			
+		}
+		model.addAttribute("currDir", currDir);
+		model.addAttribute("nextDir", nextDir);
+		model.addAttribute("dirType", "public");
+		model.addAttribute("user", user);
+		model.addAttribute("files", files);
+		
 		// Tylko folder publiczny , nazwa loginu z Path Variable
 		System.out.println("Login in Path = "+Login);
-		return "UserPage";
+		return "ViewDirs";
 	}
 	
 	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
 	@RequestMapping(value = "/{Login}/private", method = RequestMethod.GET)
-	public String Private(Model model,@PathVariable String Login)
+	public String Private(Model model,@PathVariable String Login, @RequestParam("currDir") String currDir,
+			@RequestParam("nextDir") String nextDir, @RequestParam("fileId") int fileId)
 	{
-		
+		User user = uservice.getUser(Login);
+		List<File> files= null;
+		System.out.println("CurrDir: " +currDir);
+		System.out.println("NextDir: " +nextDir);
+		System.out.println("FileId: " +fileId);
+		System.out.println("UserId: " +user.getId());
+		File file =fservice.getFile(user, fileId, currDir);
+		// jezeli jest plikiem
+		if( file.isFolder() == false){
+			// TODO wyswietlic dane pliku
+		}
+		else {
+			// jezeli jestesmy w nastepnym katalogu
+			if(nextDir != null) {
+				/*fservice.setCurrDir(fservice.getCurrDir().concat(nextDir));
+				files = fservice.getFiles(user, fservice.getCurrDir()); */
+				currDir += nextDir+"/";
+				System.out.println("CurrDir: " +currDir);
+				files = fservice.getFiles(user, currDir);	
+				for(File f : files){
+					System.out.println("File name: " +f.getNazwa());
+				}
+			}
+			
+		}	
+		model.addAttribute("currDir", currDir);
+		model.addAttribute("nextDir", nextDir);
+		model.addAttribute("dirType", "private");
+		model.addAttribute("user", user);
+		model.addAttribute("files", files);
 		// Tylko folder publiczny , nazwa loginu z Path Variable
 		System.out.println("Login in Path = "+Login);
-		return "UserPage";
+		return "ViewDirs";
 	}
 	
 

@@ -52,8 +52,8 @@
 			<hr>
 			<table>
 				<tr>
-					<td><a href="/dysk/user/${user.getLogin()}/public">${pub.getNazwa()}</a></td>
-				    <td><a href="/dysk/user/${user.getLogin()}/private">${priv.getNazwa()}</a></td>
+					<td><a href="/dysk/user/${user.getLogin()}/public?currDir=${user.getLogin()}/&nextDir=public&fileId=${pub.getId()}">${pub.getNazwa()}</a></td>
+				    <td><a href="/dysk/user/${user.getLogin()}/private?currDir=${user.getLogin()}/&nextDir=private&fileId=${priv.getId()}">${priv.getNazwa()}</a></td>
 				 </tr>
 			</table>
 		</div>

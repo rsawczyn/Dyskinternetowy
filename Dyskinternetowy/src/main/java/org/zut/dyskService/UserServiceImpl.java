@@ -17,15 +17,14 @@ public class UserServiceImpl implements UserService
 {
 	private UserDaoImpl userDao;
 	private FileDAOImpl fileDao;
-	
+	private String UserDirBasicPath;
+
 	public void setUserDao(UserDaoImpl userDao) {
 		this.userDao = userDao;
 	}
 	public void setFileDAO(FileDAOImpl fileDao) {
 		this.fileDao = fileDao;
-	}
-	private String UserDirBasicPath;
-	
+	}	
 	public void setUserDirBasicPath(String userDirBasicPath) {
 		UserDirBasicPath = userDirBasicPath;
 	}
