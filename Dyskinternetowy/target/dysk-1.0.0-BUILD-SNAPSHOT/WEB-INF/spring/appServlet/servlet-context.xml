@@ -8,7 +8,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -31,16 +31,50 @@
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="" />
 	</beans:bean>
+	
 	<beans:bean id="userdao" class="org.zut.dyskDAO.UserDaoImpl">
 		<beans:property name="data" ref="datasource"></beans:property>
 	</beans:bean>
-	<beans:bean id="userService" class="org.zut.dyskService.UserServiceImpl">
-		<beans:property name="userDao" ref="userdao"></beans:property>
+	
+	<beans:bean id="filedao" class="org.zut.dyskDAO.FileDAOImpl">
+		<beans:property name="data" ref="datasource"></beans:property>
 	</beans:bean>
 	
+	<beans:bean id="userService" class="org.zut.dyskService.UserServiceImpl">
+		<beans:property name="userDao" ref="userdao"></beans:property>	
+		<beans:property name="fileDAO" ref="filedao"></beans:property>
+		<beans:property name="userDirBasicPath" value="${BasicPath}"></beans:property>	
+	</beans:bean>
+	
+	<beans:bean id="fileService" class="org.zut.dyskService.FileServiceImpl">
+		<beans:property name="fileDAO" ref="filedao"></beans:property>
+		<beans:property name="userBasicDirPath" value="${BasicPath}"></beans:property> <!-- Zmienna z basic.properties -->
+	</beans:bean>
+	
+	<beans:bean id="MyAuth" class="org.zut.dysk.config.MyAuthProvider">
+		<beans:property name="userservice" ref="userService"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id="MyAuthManager" class="org.zut.dysk.config.AuthManager">
+		<beans:property name="userservice" ref="userService"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id="AuthSuccessHandler" class="org.zut.dysk.config.LoginSuccessHandler">
+	</beans:bean>
+	
+	<http  authentication-manager-ref="MyAuthManager">		
+		<form-login login-page="/"  		
+		authentication-failure-url="/?loginErr=yes" 		
+		username-parameter="Login"
+		password-parameter="Haslo" 		
+		authentication-success-handler-ref="AuthSuccessHandler"
+		/>
+	 	<logout logout-success-url="/?logoutOk" logout-url="/exit"/> 
+		
+	</http>
     
-	
  	<context:annotation-config/>
+ 	<global-method-security pre-post-annotations="enabled" jsr250-annotations="enabled" />
 	<context:component-scan base-package="org.zut.dysk,org.zut.dyskDAO,org.zut.dyskService,org.zut.dyskDomain,org.zut.dysk.config" />
-	
+	<context:property-placeholder location="resources/basic.properties"/>
 </beans:beans>

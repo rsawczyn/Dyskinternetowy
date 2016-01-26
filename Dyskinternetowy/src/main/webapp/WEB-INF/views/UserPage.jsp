@@ -50,8 +50,22 @@
 		<div align="center">
 			<a href="/dysk/exit" >Wyloguj</a>
 			<hr>
-			
+			<table>
+				<tr>
+					<td><a href="/dysk/user/${user.getLogin()}/public?currDir=${user.getLogin()}/&nextDir=public&fileId=${pub.getId()}">
+					<img src="${pageContext.request.contextPath}/resources/Images/folder_icon.png"/>${pub.getNazwa()}</a></td>
+				</tr>
+				<tr>
+				    <td><a href="/dysk/user/${user.getLogin()}/private?currDir=${user.getLogin()}/&nextDir=private&fileId=${priv.getId()}">
+				    <img src="${pageContext.request.contextPath}/resources/Images/folder_icon.png"/>${priv.getNazwa()}</a></td>
+			 	</tr>
+			</table>
 		</div>
 	</div>
 	<div id="stopka">
-	stop
+	stopka
+	</div>
+</div>
+</body>
+
+</html>
