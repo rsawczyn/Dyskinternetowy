@@ -57,7 +57,25 @@
 				 	</c:forEach>
 				 </tr>
 			</table>
-		</div>
+			<form method="POST" action="addFile" enctype="multipart/form-data">
+			<table>
+				<input type="hidden" name="currDir" value="${currDir}">
+				<input type="hidden" name="dirType" value="${dirType}">
+				<tr> 
+		        	<td>Plik do dodania:</td> <td><input type="file" name="file"></td><br />
+		        </tr>
+		       	<tr>
+		        	<td></td><td><input type="submit" value="Upload"> Dodaj plik</td>
+		        </tr>
+	        </table>
+	    </form>
+	    <form method="POST" action="addDir">
+	    	<input type="hidden" name="currDir" value="${currDir}">
+			<input type="hidden" name="dirType" value="${dirType}">
+			Katalog do dodania:<input type="text" name="dirName"><br />
+			<input type="submit" value="Upload"> Dodaj katalog
+	    </form>
+		</div>	
 	</div>
 	<div id="stopka">
 	stopka

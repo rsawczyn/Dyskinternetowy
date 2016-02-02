@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.zut.dyskDAO.FileDAOImpl;
 import org.zut.dyskDomain.File;
 import org.zut.dyskDomain.User;
+import org.zut.dyskService.FileService;
 
 public class FileServiceImpl implements FileService 
 {
@@ -23,7 +24,11 @@ public class FileServiceImpl implements FileService
 	@Autowired
 	public void setFileDAO(FileDAOImpl fileDAO) {
 		this.fileDAO = fileDAO;
-	}	
+	}
+	
+	public String getUserBasicDirPath() {
+		return UserBasicDirPath;
+	} 
 	@Autowired
 	public void setUserBasicDirPath(String userBasicDirPath) {
 		UserBasicDirPath = userBasicDirPath;
@@ -43,21 +48,22 @@ public class FileServiceImpl implements FileService
 		return file;
 	}
 	public boolean addFile(User user, File file) {
+		file.setLokalizacja(UserBasicDirPath+file.getLokalizacja());
 		fileDAO.addFile(user, file);
 		return true;
 	}
 	@Override
-	public boolean deleteFile(User user, int id, String location) {
-		// TODO Auto-generated method stub
+	public boolean deleteFile(User user, int fileId) {
+		fileDAO.deleteFile(user, fileId);
 		return false;
 	}
 	@Override
-	public boolean editFileInfo(User user, int id) {
-		// TODO Auto-generated method stub
+	public boolean editFileInfo(User user, int fileId, File file) {
+		fileDAO.editFileInfo(user, fileId, file);
 		return false;
 	}
 	@Override
-	public boolean publishFile(User user, int id, String location) {
+	public boolean publishFile(User user, int fileId, String location) {
 		// TODO Auto-generated method stub
 		return false;
 	}

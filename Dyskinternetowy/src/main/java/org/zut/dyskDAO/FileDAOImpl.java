@@ -65,15 +65,17 @@ public class FileDAOImpl implements FileDAO {
 		return true;
 	}
 	@Override
-	public boolean deleteFile(User user, int id, String location) {
-		// TODO Auto-generated method stub
+	public boolean deleteFile(User user, int id) {
+		String SQL ="delete from plik where Id=? AND Wlasciciel=?";
+		jdbcTemplate.update( SQL, id, user.getId());
 		return false;
 	}
 
 	@Override
-	public boolean editFileInfo(User user, int id) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean editFileInfo(User user, int id, File file) {
+		String SQL ="update plik set Nazwa = ?,Opis =? where Id = ? AND Wlasciciel = ?";
+		jdbcTemplate.update( SQL,file.getNazwa(),file.getOpis(), id, user.getId()); 
+		return true;
 	}
 
 	@Override

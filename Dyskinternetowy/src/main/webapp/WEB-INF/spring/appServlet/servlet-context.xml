@@ -77,4 +77,10 @@
  	<global-method-security pre-post-annotations="enabled" jsr250-annotations="enabled" />
 	<context:component-scan base-package="org.zut.dysk,org.zut.dyskDAO,org.zut.dyskService,org.zut.dyskDomain,org.zut.dysk.config" />
 	<context:property-placeholder location="resources/basic.properties"/>
-</beans:beans>
+	
+	 <beans:bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+         <!-- setting maximum upload size -->
+        <beans:property name="maxUploadSize" value="5000000" />
+	 </beans:bean>
+ </beans:beans>
