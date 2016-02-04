@@ -55,17 +55,17 @@ public class FileServiceImpl implements FileService
 	@Override
 	public boolean deleteFile(User user, int fileId) {
 		fileDAO.deleteFile(user, fileId);
-		return false;
+		return true;
 	}
 	@Override
 	public boolean editFileInfo(User user, int fileId, File file) {
 		fileDAO.editFileInfo(user, fileId, file);
-		return false;
+		return true;
 	}
 	@Override
 	public boolean publishFile(User user, int fileId, String location) {
-		// TODO Auto-generated method stub
-		return false;
+		fileDAO.publishFile(user, fileId, location);
+		return true;
 	}
 
 }

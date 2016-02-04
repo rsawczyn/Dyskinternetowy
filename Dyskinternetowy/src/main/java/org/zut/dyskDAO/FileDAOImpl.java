@@ -68,7 +68,7 @@ public class FileDAOImpl implements FileDAO {
 	public boolean deleteFile(User user, int id) {
 		String SQL ="delete from plik where Id=? AND Wlasciciel=?";
 		jdbcTemplate.update( SQL, id, user.getId());
-		return false;
+		return true;
 	}
 
 	@Override
@@ -80,8 +80,9 @@ public class FileDAOImpl implements FileDAO {
 
 	@Override
 	public boolean publishFile(User user, int id, String location) {
-		// TODO Auto-generated method stub
-		return false;
+		String SQL ="update plik set Lokalizacja = ? where Id = ? AND Wlasciciel = ?";
+		jdbcTemplate.update( SQL, location, id, user.getId());
+		return true;
 	}
 
 }

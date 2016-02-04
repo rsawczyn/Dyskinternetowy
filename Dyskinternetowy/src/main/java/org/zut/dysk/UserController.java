@@ -2,15 +2,22 @@ package org.zut.dysk;
 
 import java.io.BufferedOutputStream;
 import java.io.Console;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -165,7 +172,10 @@ public class UserController
 		System.out.println("currDir: " + currDir);
 		System.out.println("dirType: " + dirType);
 		User user = uservice.getUser(Login);
-		fservice.deleteFile(user, fileId);
+		File f = fservice.getFile(user, fileId, currDir);
+		fservice.deleteFile(user, fileId);		
+		java.io.File file = new java.io.File(fservice.getUserBasicDirPath()+currDir+f.getNazwa());	
+		file.delete();
 		List<File> files= fservice.getFiles(user, currDir);
         model.addAttribute("currDir", currDir);
 		model.addAttribute("nextDir", null);
@@ -181,14 +191,21 @@ public class UserController
 			@PathVariable String Login, @RequestParam("currDir") String currDir, 
 			@RequestParam("dirType") String dirType)
 	{
-		User user = uservice.getUser(Login);		
+		User user = uservice.getUser(Login);
+		File oldFile = fservice.getFile(user, file.getId(), file.getLokalizacja().substring(
+				file.getLokalizacja().indexOf(Login)));
+		System.out.println("Old file localization: " + oldFile.getLokalizacja()+oldFile.getNazwa());
+		java.io.File oldName = new java.io.File(oldFile.getLokalizacja()+oldFile.getNazwa());
 		System.out.println("File id: " + file.getId());
 		System.out.println("File nazwa: " + file.getNazwa());
 		System.out.println("File opis: " + file.getOpis());
+		
 		fservice.editFileInfo(user, file.getId(), file);
 		// Loginy na podstawie Autoryzacji(Principal)
 		File f = fservice.getFile(user, file.getId(), file.getLokalizacja().substring(
 				file.getLokalizacja().indexOf(Login)));
+		java.io.File newName = new java.io.File(f.getLokalizacja()+f.getNazwa());
+	    oldName.renameTo(newName);
 		model.addAttribute("currDir", currDir);
 		model.addAttribute("nextDir", null);
 		model.addAttribute("dirType", dirType);
@@ -260,7 +277,7 @@ public class UserController
 		// jezeli jest plikiem
 		if( file.isFolder() == false){
 			model.addAttribute("currDir", currDir);
-			model.addAttribute("dirType", "public");
+			model.addAttribute("dirType", "private");
 			model.addAttribute("user", user);
 			model.addAttribute("file", file);
 			return "ViewFiles";
@@ -289,5 +306,71 @@ public class UserController
 		return "ViewDirs";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
+	@RequestMapping(value = "/{Login}/downloadFile", method = RequestMethod.POST)
+	public void downloadFile(HttpServletResponse response, Model model,
+			@PathVariable String Login, @RequestParam("currDir") String currDir, 
+			@RequestParam("dirType") String dirType, 
+			@RequestParam("fileName") String fileName)
+	{
+		User user = uservice.getUser(Login);
+		//tell browser program going to return an application file 
+        //instead of html page
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition","attachment;filename="+fileName);
+        try 
+    	{
+	        java.io.File file = new java.io.File(fservice.getUserBasicDirPath()+currDir+fileName);
+	        System.out.println("absolutePathOfFile: " + file.getAbsolutePath());
+	        FileInputStream fileIn = new FileInputStream(file);
+	        ServletOutputStream out = response.getOutputStream();
+	
+	        byte[] outputByte = new byte[4096];
+	        //copy binary contect to output stream
+	        while(fileIn.read(outputByte, 0, 4096) != -1)
+	        {
+	        	out.write(outputByte, 0, 4096);
+	        }
+	        fileIn.close();
+	        out.flush();
+	        out.close();
+    	}
+        catch(Exception e) {
+        	  System.out.println("You failed to download" + fileName + 
+        			  " => " + e.getMessage());
+        }
+	}
+	
+	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
+	@RequestMapping(value = "/{Login}/publishFile", method = RequestMethod.POST)
+	public String publishFile(Model model,@PathVariable String Login, 
+			@RequestParam("currDir") String currDir, @RequestParam("dirType") String dirType, 
+			@RequestParam("fileName") String fileName, @RequestParam("fileId") int fileId)
+	{
+		User user = uservice.getUser(Login);
+        try 
+    	{
+        	String oldPath = fservice.getUserBasicDirPath()+currDir;
+        	String newPath = fservice.getUserBasicDirPath()+Login+"/public/";
+        	FileUtils.moveFile(
+        		      FileUtils.getFile(oldPath+fileName), 
+        		      FileUtils.getFile(newPath+fileName));
+        	System.out.println("movefrom path: "+ oldPath+fileName);
+        	System.out.println("target path: "+ newPath+fileName);
 
+    		fservice.publishFile(user, fileId, newPath);
+    		File f = fservice.getFile(user, fileId, Login+"/public/");
+    		model.addAttribute("currDir", currDir);
+    		model.addAttribute("nextDir", null);
+    		model.addAttribute("dirType", "public");
+    		model.addAttribute("user", user);
+    		model.addAttribute("file", f);
+    		return "ViewFiles";
+    	}
+        catch(Exception e) {
+        	  return "You failed to publish file " + fileName + 
+        			  " => " + e.getMessage();
+        }
+	}
+	
 }

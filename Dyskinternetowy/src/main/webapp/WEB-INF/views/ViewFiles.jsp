@@ -1,3 +1,4 @@
+<%@ page import="java.util.*" import="java.io.*"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -49,13 +50,40 @@
 	<div id="zawartosc">	
 		<div align="center">
 			<a href="/dysk/exit" >Wyloguj</a>
-			<hr>		
-			<form action="deleteFile" method="post">				
-				<input type="hidden" name="fileId" value="${file.getId()}">
-				<input type="hidden" name="currDir" value="${currDir}">
-				<input type="hidden" name="dirType" value="${dirType}">
-				<input type="submit" value="Usun">
-			</form>
+			<hr>
+			<table>	
+				<tr>
+				<td>
+					<form action="downloadFile" method="post">				
+						<input type="hidden" name="fileName" value="${file.getNazwa()}">
+						<input type="hidden" name="currDir" value="${currDir}">
+						<input type="hidden" name="dirType" value="${dirType}">
+						<input type="submit" value="Pobierz">
+					</form>
+				</td>
+				<% String dirType = (String)request.getAttribute("dirType");
+				if(dirType.equals("private")) { %>	
+				<td>
+					<form action="publishFile" method="post">
+						<input type="hidden" name="fileId" value="${file.getId()}">				
+						<input type="hidden" name="fileName" value="${file.getNazwa()}">
+						<input type="hidden" name="currDir" value="${currDir}">
+						<input type="hidden" name="dirType" value="${dirType}">
+						<input type="submit" value="Opublikuj">
+					</form>
+				</td>
+				<% }
+				%>	
+				<td>
+					<form action="deleteFile" method="post">				
+						<input type="hidden" name="fileId" value="${file.getId()}">
+						<input type="hidden" name="currDir" value="${currDir}">
+						<input type="hidden" name="dirType" value="${dirType}">
+						<input type="submit" value="Usun">
+					</form>
+				</td>
+				</tr>
+			</table>
 			<form:form action="updateFile" method="post" commandName="file">				
 				<input type="hidden" name="currDir" value="${currDir}">
 				<input type="hidden" name="dirType" value="${dirType}">
