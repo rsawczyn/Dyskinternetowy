@@ -16,9 +16,9 @@
 	</div>
 	
 	<div id="menu_1">
-	menu 1
+	Szybkie Menu 
 		<ul>
-			<li>link 1</li>
+			<li><a href="/dysk/register">Zarejestruj sie</a></li>
 			<li>link 2</li>
 			<li>link 3</li>
 			<li>link 4</li>
@@ -70,9 +70,7 @@
 	        </table>
 		</form:form>
 	</div>
-	<div id="stopka">
-	stopka
-	</div>
+	<jsp:include page="/WEB-INF/views/stopka.jsp"></jsp:include>
 	
 </div>
 </body>
