@@ -3,6 +3,7 @@ package org.zut.dyskService;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
@@ -125,6 +126,17 @@ public class UserServiceImpl implements UserService
 		if(u == null)return false;
 		if(u.getHaslo().equals(Haslo))return true;
 		else return false;
+	}
+	@Override
+	public List<User> getAll() {
+		
+		// TODO Auto-generated method stub
+		return userDao.getAll();
+	}
+	@Override
+	public User GetUserById(int id) {
+		// TODO Auto-generated method stub
+		return userDao.GetUserById(id);
 	}
 
 }

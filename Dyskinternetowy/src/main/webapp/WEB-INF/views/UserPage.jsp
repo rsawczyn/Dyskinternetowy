@@ -15,36 +15,8 @@
 		<img id="LogoDIV" src="${pageContext.request.contextPath}/resources/Images/file-server-300px.png" alt="Logo">
 	</div>
 	
-	<div id="menu_1">
-	menu 1
-		<ul>
-			<li>link 1</li>
-			<li>link 2</li>
-			<li>link 3</li>
-			<li>link 4</li>
-			<li>link 5</li>
-			<li>link 6</li>
-			<li>link 7</li>
-			<li>link 8</li>
-			<li>link 9</li>
-			<li>link 10</li>
-		</ul>
-	</div>
-	
-	<div id="menu_2">
-		<ul>
-			<li>link 11</li>
-			<li>link 12</li>
-			<li>link 13</li>
-			<li>link 14</li>
-			<li>link 15</li>
-			<li>link 16</li>
-			<li>link 17</li>
-			<li>link 18</li>
-			<li>link 19</li>
-			<li>link 20</li>
-		</ul>
-	</div>
+	<jsp:include page="/WEB-INF/views/menu1.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/menu2.jsp"></jsp:include>
 	
 	<div id="zawartosc">	
 		<div align="center">
@@ -56,15 +28,13 @@
 					<img src="${pageContext.request.contextPath}/resources/Images/folder_icon.png"/>${pub.getNazwa()}</a></td>
 				</tr>
 				<tr>
-				    <td><a href="/dysk/user/${user.getLogin()}/private?currDir=${user.getLogin()}/&nextDir=private&fileId=${priv.getId()}">
+				    <td><a href="/dysk/user/private?currDir=${user.getLogin()}/&nextDir=private&fileId=${priv.getId()}">
 				    <img src="${pageContext.request.contextPath}/resources/Images/folder_icon.png"/>${priv.getNazwa()}</a></td>
 			 	</tr>
 			</table>
 		</div>
 	</div>
-	<div id="stopka">
-	stopka
-	</div>
+	<jsp:include page="/WEB-INF/views/stopka.jsp"></jsp:include>
 </div>
 </body>
 

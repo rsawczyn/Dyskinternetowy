@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.zut.dyskDAO.FileDAOImpl;
 import org.zut.dyskDomain.File;
+import org.zut.dyskDomain.Komentaz;
 import org.zut.dyskDomain.User;
+import org.zut.dyskService.FileService;
 
 public class FileServiceImpl implements FileService 
 {
@@ -23,7 +25,11 @@ public class FileServiceImpl implements FileService
 	@Autowired
 	public void setFileDAO(FileDAOImpl fileDAO) {
 		this.fileDAO = fileDAO;
-	}	
+	}
+	
+	public String getUserBasicDirPath() {
+		return UserBasicDirPath;
+	} 
 	@Autowired
 	public void setUserBasicDirPath(String userBasicDirPath) {
 		UserBasicDirPath = userBasicDirPath;
@@ -43,22 +49,44 @@ public class FileServiceImpl implements FileService
 		return file;
 	}
 	public boolean addFile(User user, File file) {
+		file.setLokalizacja(UserBasicDirPath+file.getLokalizacja());
 		fileDAO.addFile(user, file);
 		return true;
 	}
 	@Override
-	public boolean deleteFile(User user, int id, String location) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteFile(User user, int fileId) {
+		fileDAO.deleteFile(user, fileId);
+		return true;
 	}
 	@Override
-	public boolean editFileInfo(User user, int id) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean editFileInfo(User user, int fileId, File file) {
+		fileDAO.editFileInfo(user, fileId, file);
+		return true;
 	}
 	@Override
-	public boolean publishFile(User user, int id, String location) {
+	public boolean publishFile(User user, int fileId, String location) {
+		fileDAO.publishFile(user, fileId, location);
+		return true;
+	}
+	@Override
+	public List<File> getAllFilesForUser(int Id) {
 		// TODO Auto-generated method stub
+		return fileDAO.getAllForUser(Id);
+	}
+	@Override
+	public List<Komentaz> GetAllCommentForFile(int FileId)
+	{	
+		return fileDAO.GetAllCommentsForFile(FileId);
+	}
+	@Override
+	public boolean AddComment(Komentaz k) {
+		fileDAO.AssignKomentaz(k);
+		return true;
+	}
+	@Override
+	public boolean DelComment(Komentaz k) {
+		// TODO Auto-generated method stub
+		fileDAO.DelComment(k);
 		return false;
 	}
 

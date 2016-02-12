@@ -91,29 +91,10 @@
 	                </tr>
 	            </table>		
 			</form:form>
-			<%}
-			else if(request.getMethod() == "POST" && request.getAttribute("InValid")==null)
-			{%>
-			<p>${message }</p>
-			<form:form method="post" action="login" commandName="UserLoginAtt">
-				<table border="0">
-		        	<tr>
-	                    <td colspan="2" align="center"><h2>Logowanie!</h2></td>
-	                </tr>
-	                <tr>
-	                    <td>User Name:</td>
-	                    <td><form:input path="Login" /></td>
-	                </tr>
-	                <tr>
-	                    <td>Password:</td>
-	                    <td><form:password path="Haslo" /></td>
-	                </tr>          
-	                <tr>
-	                    <td colspan="2" align="center"><input type="submit" value="Zaloguj" /></td>
-	                </tr>
-		        </table>
-			</form:form>
 			<%} %>
+			
+			
+		
 		</div>
 		
 	</div>
