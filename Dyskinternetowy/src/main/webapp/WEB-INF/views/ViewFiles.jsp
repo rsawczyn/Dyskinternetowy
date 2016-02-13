@@ -158,7 +158,7 @@
 				<span><b>Dodal:</b> ${UserIdMap.get(Kom.getTworca())}</span><br>
 				<span><b>Data Dodania:</b> ${Kom.getDate() }</span><br>
 				<span><b>Tresc:</b> ${Kom.getTresc() }</span><br>
-				<c:if test="${IsOwner == true }">
+				<c:if test="${IsOwner == true || p == UserIdMap.get(Kom.getTworca()) }">
 					<form:form action="/dysk/user/DelComment" mehod="POST">
 						<input type="hidden" name="curDir" value="${currDir }"/>	
 						<input type="hidden" name="login" value="${Login }"/>
@@ -171,15 +171,17 @@
 			<br>
 			</c:forEach>
 			<c:if test="${IsOwner == false }">
-				
-				<form:form action="/dysk/user/AddComment" method="POST" id="form1"  >	
-					<input type="hidden" name="curDir" value="${currDir }"/>	
-					<input type="hidden" name="login" value="${Login }"/>				
-					<input name="tworca" type="text" value="${p }"/>	
-					<input name="tresc" type="text" />
-					<input name="file" type="text" value="${file.getId() }"/>						
-					<input type="submit" value="Dodaj"/>
-				</form:form>
+				<fieldset>
+					<form:form action="/dysk/user/AddComment" method="POST" id="form1"  >	
+						<input type="hidden" name="curDir" value="${currDir }"/>	
+						<input type="hidden" name="login" value="${Login }"/>				
+						<input name="tworca" type="hidden" value="${p }"/>							
+						<p>Dodaj Nowy komentaz</p>
+						<span>Tresc</span><input name="tresc" type="text" /><br>
+						<input name="file" type="hidden" value="${file.getId() }"/>						
+						<input type="submit" value="Dodaj"/>
+					</form:form>
+				</fieldset>
 				
 			</c:if>
 		</div>

@@ -80,7 +80,7 @@ public class FileServiceImpl implements FileService
 	}
 	@Override
 	public boolean AddComment(Komentaz k) {
-		fileDAO.AssignKomentaz(k);
+		fileDAO.AddComment(k);
 		return true;
 	}
 	@Override
