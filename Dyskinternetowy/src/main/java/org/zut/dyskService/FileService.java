@@ -17,5 +17,6 @@ public interface FileService {
 	public List<Komentaz>GetAllCommentForFile(int FileId);
 	public boolean AddComment(Komentaz k);
 	public boolean DelComment(Komentaz k);
+	public File GetFileByLocation(String Location,User u);
 }
  

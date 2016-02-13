@@ -67,6 +67,15 @@
 	
 	<div id="zawartosc">	
 		<div align="center">
+			
+			<form action="Up" method="get">
+				<input type="hidden" name="type" value="FileView">
+				<input type="hidden" name="currDir" value="${currDir}">
+				<input type="hidden" name="dirType" value="${dirType}">
+				<input type="hidden" name="Login" value="${user.getLogin()}">
+				<input type="submit" value="Up"/>
+			</form>
+			
 			<hr>
 			<table>	
 				<tr>

@@ -31,8 +31,9 @@ public class FileDAOImpl implements FileDAO {
 	
 	@Override
 	public List<File> getFiles(User user, String location) {
-		jdbcTemplate = new JdbcTemplate(data);
-		String SQL = "select * from plik where Wlasciciel = ? AND Lokalizacja = ?";
+		jdbcTemplate = new JdbcTemplate(data);		
+		
+		String SQL = "select * from plik where Wlasciciel = ? AND Lokalizacja = ? ";
 		List<File> files;
 		try {
 			files= jdbcTemplate.query(SQL,new Object[]{user.getId(), location}, new FileMapper());
@@ -131,6 +132,31 @@ public class FileDAOImpl implements FileDAO {
 		String SQL="DELETE FROM komentaz WHERE Id = ?";
 		jdbcTemplate.update(SQL,k.getId());
 		return true;
+	}
+
+	@Override
+	public File GetFileByLocation(String Location, User u) 
+	{
+		String Nazwa = null;		
+		String ShortLoc = null;
+		for(int i = Location.length() - 2;i>0;i--)
+		{
+			char a = Location.charAt(i);
+			
+			//System.out.println("CHAR = " + a);
+			if(i != Location.length()-1 && a =='/' )
+			{
+				Nazwa = Location.substring(i+1,Location.length()-1);
+				ShortLoc = Location.substring(0,i+1);
+				break;
+			}
+		}
+		//Nazwa.replace("/"," ");
+		//System.out.println("NAZWA = "+Nazwa+"SHORTLOC = "+ ShortLoc);
+		String SQL="SELECT * FROM plik WHERE Lokalizacja=? AND Wlasciciel=? AND Nazwa=?";
+		jdbcTemplate = new JdbcTemplate(data);
+		File f = jdbcTemplate.queryForObject(SQL,new Object[]{ShortLoc,u.getId(),Nazwa},new FileMapper());
+		return f;
 	}
 
 	

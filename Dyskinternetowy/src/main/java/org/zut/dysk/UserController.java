@@ -79,7 +79,59 @@ public class UserController
 		model.addAttribute("pub", pub);
 		model.addAttribute("priv", priv);
 		model.addAttribute("user",user);
+		model.addAttribute("root",true);
 		return "UserPage";
+	}
+	
+	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
+	@RequestMapping(value = "/{Login}/Up", method = RequestMethod.GET)	
+	public String GoUp(@RequestParam(value="currDir")String currDir,@RequestParam(value="Login")String Login
+			,@RequestParam(value="dirType")String dirType,@RequestParam(value="type")String Type)
+	{
+		if(Type.equals("DirView") || Type.equals("FileView"))
+		{
+			User user = uservice.getUser(Login);
+			String newcurr = null;
+			
+			for(int i = currDir.length() - 2;i>0;i--)
+			{
+				char a = currDir.charAt(i);
+				
+				System.out.println("CHAR = " + a);
+				if(i != currDir.length()-1 && a =='/' )
+				{
+					if(Type.equals("FileView")) newcurr = currDir.substring(0,currDir.length());
+					else newcurr = currDir.substring(0,i+1);				
+					break;
+				}
+			}
+			String Location = "C://ServerUsers/"+newcurr;
+			System.out.println("LOCATION OF UP  = "+Location+ " newCur = "+ newcurr);
+			
+			File DirId = fservice.GetFileByLocation(Location, user);
+			
+			String Nazwa = null;		
+			String ShortLoc = null;
+			for(int i = Location.length() - 2;i>0;i--)
+			{
+				char a = Location.charAt(i);
+				
+				System.out.println("CHAR = " + a);
+				if(i != Location.length()-1 && a =='/' )
+				{
+					Nazwa = Location.substring(i+1,Location.length()-1);
+					ShortLoc = Location.substring(16,i+1);
+					break;
+				}
+			}
+			System.out.println("UP NAZWA (nextDir) = "+Nazwa+ " SHORT LOC (currDir) = "+ ShortLoc);
+			return "redirect:/user/"+Login+"/"+ dirType +"?currDir="+ShortLoc+"&nextDir="+Nazwa+"&fileId="+DirId.getId();
+		}
+		else if(Type.equals("FileView"))
+		{
+			//return "redirect:/user/"+Login+"/"+ dirType +"?currDir="+ShortLoc+"&nextDir="+Nazwa+"&fileId="+DirId.getId();
+		}
+		return Type;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
@@ -105,12 +157,30 @@ public class UserController
     		fservice.addFile(user, f);
 		}
 		List<File> files= fservice.getFiles(user, currDir);
-        model.addAttribute("currDir", currDir);
-		model.addAttribute("nextDir", null);
-		model.addAttribute("dirType", dirType);
-		model.addAttribute("user", user);
-		model.addAttribute("files", files);
-        return "ViewDirs";
+        //model.addAttribute("currDir", currDir);
+		//model.addAttribute("nextDir", null);
+		//model.addAttribute("dirType", dirType);
+		//model.addAttribute("user", user);
+		//model.addAttribute("files", files);
+		String Location = "C://ServerUsers/"+currDir;
+		System.out.println("LOCATION OF DIR ID = "+Location);
+		File DirId = fservice.GetFileByLocation(Location, user);
+		
+		String Nazwa = null;		
+		String ShortLoc = null;
+		for(int i = Location.length() - 2;i>0;i--)
+		{
+			char a = Location.charAt(i);
+			
+			System.out.println("CHAR = " + a);
+			if(i != Location.length()-1 && a =='/' )
+			{
+				Nazwa = Location.substring(i+1,Location.length()-1);
+				ShortLoc = Location.substring(16,i+1);
+				break;
+			}
+		}
+        return "redirect:/user/"+Login+"/"+ dirType +"?currDir="+ShortLoc+"&nextDir="+Nazwa+"&fileId="+DirId.getId();
 	}
 	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
 	@RequestMapping(value = "/{Login}/addFile", method = RequestMethod.POST)
@@ -158,12 +228,30 @@ public class UserController
                 return "You failed to upload " + file.getOriginalFilename() + " => " + e.getMessage();
             }        
     		List<File> files= fservice.getFiles(user, currDir);
-            model.addAttribute("currDir", currDir);
-    		model.addAttribute("nextDir", null);
-    		model.addAttribute("dirType", dirType);
-    		model.addAttribute("user", user);
-    		model.addAttribute("files", files);
-            return "ViewDirs";
+           // model.addAttribute("currDir", currDir);
+    		//model.addAttribute("nextDir", null);
+    		//model.addAttribute("dirType", dirType);
+    		//model.addAttribute("user", user);
+    		//model.addAttribute("files", files);
+    		String Location = "C://ServerUsers/"+currDir;
+    		System.out.println("LOCATION OF DIR ID = "+Location);
+    		File DirId = fservice.GetFileByLocation(Location, user);
+    		
+    		String Nazwa = null;		
+    		String ShortLoc = null;
+    		for(int i = Location.length() - 2;i>0;i--)
+    		{
+    			char a = Location.charAt(i);
+    			
+    			System.out.println("CHAR = " + a);
+    			if(i != Location.length()-1 && a =='/' )
+    			{
+    				Nazwa = Location.substring(i+1,Location.length()-1);
+    				ShortLoc = Location.substring(16,i+1);
+    				break;
+    			}
+    		}
+            return "redirect:/user/"+Login+"/"+ dirType +"?currDir="+ShortLoc+"&nextDir="+Nazwa+"&fileId="+DirId.getId();
         } else {
             return "You failed to upload " + file.getOriginalFilename()
                     + " because the file was empty.";
@@ -174,11 +262,14 @@ public class UserController
 	@RequestMapping(value = "/{Login}/deleteFile", method = RequestMethod.POST)
 	public String deleteFile(Model model,@PathVariable String Login, 
 			@RequestParam("currDir") String currDir, @RequestParam("dirType") String dirType,
-			@RequestParam("fileId") int fileId)
+			@RequestParam("fileId") int fileId , Principal pal)
 	{
 		//System.out.println("currDir: " + currDir);
 		//System.out.println("dirType: " + dirType);
 		User user = uservice.getUser(Login);
+		if(Login == pal.getName()) model.addAttribute("owner",true);
+		else
+		model.addAttribute("owner",false);
 		List<Komentaz> k = fservice.GetAllCommentForFile(fileId);
 		for(Komentaz tmp : k)
 		{
@@ -189,12 +280,32 @@ public class UserController
 		java.io.File file = new java.io.File(fservice.getUserBasicDirPath()+currDir+f.getNazwa());	
 		file.delete();
 		List<File> files= fservice.getFiles(user, currDir);
-        model.addAttribute("currDir", currDir);
-		model.addAttribute("nextDir", null);
-		model.addAttribute("dirType", dirType);
-		model.addAttribute("user", user);
-		model.addAttribute("files", files);
-		return "ViewDirs";
+       // model.addAttribute("currDir", currDir);
+		//model.addAttribute("nextDir", null);
+		//model.addAttribute("dirType", dirType);
+		//model.addAttribute("user", user);
+		//model.addAttribute("files", files);
+		String Location = "C://ServerUsers/"+currDir;
+		//System.out.println("LOCATION OF DIR ID = "+Location);
+		File DirId = fservice.GetFileByLocation(Location, user);
+		
+		String Nazwa = null;		
+		String ShortLoc = null;
+		for(int i = Location.length() - 2;i>0;i--)
+		{
+			char a = Location.charAt(i);
+			
+			//System.out.println("CHAR = " + a);
+			if(i != Location.length()-1 && a =='/' )
+			{
+				Nazwa = Location.substring(i+1,Location.length()-1);
+				ShortLoc = Location.substring(16,i+1);
+				break;
+			}
+		}
+		
+		//System.out.println("DIRID = " + DirId.getId());
+		return "redirect:/user/"+Login+"/"+ dirType +"?currDir="+ShortLoc+"&nextDir="+Nazwa+"&fileId="+DirId.getId();
 	}
 	
 	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
@@ -290,6 +401,7 @@ public class UserController
     			UserIdMap.put(com.getTworca(),ULogin);
     		}
     		model.addAttribute("UserIdMap",UserIdMap);
+    		
 			return "ViewFiles";
 		}
 		else {
@@ -314,6 +426,7 @@ public class UserController
 		model.addAttribute("owner",IsOwner);
 		// Tylko folder publiczny , nazwa loginu z Path Variable
 		//System.out.println("Login in Path = "+Login);
+		if(currDir.equals(Login+"/")) model.addAttribute("root",true);
 		return "ViewDirs";
 	}
 	

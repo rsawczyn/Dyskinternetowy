@@ -89,5 +89,11 @@ public class FileServiceImpl implements FileService
 		fileDAO.DelComment(k);
 		return false;
 	}
+	@Override
+	public File GetFileByLocation(String Location, User u) 
+	{
+		// TODO Auto-generated method stub
+		return fileDAO.GetFileByLocation(Location, u);
+	}
 
 }

@@ -20,7 +20,15 @@
 	
 	<div id="zawartosc">	
 		<div align="center">
-			<a href="/dysk/exit" >Wyloguj</a>
+			<c:if test="${root !=true }">
+				<form action="Up" method="get">
+					<input type="hidden" name="type" value="DirView">
+					<input type="hidden" name="currDir" value="${currDir}">
+					<input type="hidden" name="dirType" value="${dirType}">
+					<input type="hidden" name="Login" value="${user.getLogin()}">
+					<input type="submit" value="Up"/>
+				</form>
+			</c:if>
 			<hr>
 			<table>
 					<!-- Zmiany niepewne brak uploadu plików do testów -->
@@ -39,7 +47,7 @@
 				 	</c:forEach>
 				 
 			</table>
-		<c:if test="${owner == true }">			
+		<c:if test="${owner == true && root !=true }">			
 			<form method="POST" action="addFile" enctype="multipart/form-data">
 				<table>
 					<input type="hidden" name="currDir" value="${currDir}">

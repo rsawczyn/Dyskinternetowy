@@ -20,7 +20,6 @@
 	
 	<div id="zawartosc">	
 		<div align="center">
-			<a href="/dysk/exit" >Wyloguj</a>
 			<hr>
 			<table>
 				<tr>
