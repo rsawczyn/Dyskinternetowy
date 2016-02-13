@@ -107,7 +107,7 @@ public class FileDAOImpl implements FileDAO {
 	}
 
 	@Override
-	public boolean AssignKomentaz(Komentaz k) 
+	public boolean AddComment(Komentaz k) 
 	{
 		jdbcTemplate = new JdbcTemplate(data);
 		String SQL = "INSERT INTO komentaz (Tworca,DataStworzenia,Tresc,Przypisany) VALUES(?,?,?,?) ";

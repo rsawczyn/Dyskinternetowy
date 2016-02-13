@@ -14,7 +14,7 @@ public interface FileDAO {
 	public boolean publishFile(User user, int fileId, String location);
 	public boolean addFile(User user, File file);
 	public List<File> getAllForUser(int UserId);
-	public boolean AssignKomentaz(Komentaz k);
+	public boolean AddComment(Komentaz k);
 	public List<Komentaz> GetAllCommentsForFile(int FileId);
 	public boolean DelComment(Komentaz k);
 }
