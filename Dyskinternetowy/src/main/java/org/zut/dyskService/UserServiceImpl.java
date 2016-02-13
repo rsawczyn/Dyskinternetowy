@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService
 		boolean result =  userDao.addUser(u);
 		File file = new File();
 		file.setFolder(true);
-		file.setSumaKontrolna(null);
+		file.setPlikPrywatny(false);
 		file.setRozmiar(null);
 		file.setFormat(null);
 		file.setOpis(null);

@@ -18,7 +18,7 @@ public class FileMapper implements RowMapper<File> {
 			file.setNazwa(rs.getString("Nazwa"));
 			file.setOpis(rs.getString("Opis"));
 			file.setRozmiar(rs.getString("Rozmiar"));
-			file.setSumaKontrolna(rs.getString("SumaKontrolna"));
+			file.setPlikPrywatny(rs.getBoolean("PlikPrywatny"));
 			file.setWlasciciel(rs.getInt("Wlasciciel"));
 
 			return file;

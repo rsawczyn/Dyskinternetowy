@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.zut.dyskDomain.File;
@@ -60,10 +61,10 @@ public class FileDAOImpl implements FileDAO {
 	@Override
 	public boolean addFile(User user, File file){
 		jdbcTemplate = new JdbcTemplate(data);
-		String SQL = "insert into plik (Lokalizacja,Folder,Nazwa,SumaKontrolna,Rozmiar,Format,"
+		String SQL = "insert into plik (Lokalizacja,Folder,Nazwa,PlikPrywatny,Rozmiar,Format,"
 				+ "Wlasciciel,Opis,DataDodania) values (?,?,?,?,?,?,?,?,?)";
 		jdbcTemplate.update( SQL,file.getLokalizacja(),file.getFolder(),file.getNazwa(),
-				file.getSumaKontrolna(),file.getRozmiar(),file.getFormat(),file.getWlasciciel(),
+				file.getPlikPrywatny(),file.getRozmiar(),file.getFormat(),file.getWlasciciel(),
 				file.getOpis(),file.getDataDodania()); 
 		
 		//Create User DIR at resources/users/user_login	
@@ -93,9 +94,17 @@ public class FileDAOImpl implements FileDAO {
 
 	@Override
 	public boolean publishFile(User user, int id, String location) {
-		jdbcTemplate = new JdbcTemplate(data);
-		String SQL ="update plik set Lokalizacja = ? where Id = ? AND Wlasciciel = ?";
-		jdbcTemplate.update( SQL, location, id, user.getId());
+		try
+		{
+			
+			jdbcTemplate = new JdbcTemplate(data);
+			String SQL ="update plik set Lokalizacja = ?,PlikPrywatny = ? where Id = ? AND Wlasciciel = ? ";
+			jdbcTemplate.update( SQL, location,0,id, user.getId());
+		}
+		catch(DataAccessException E )
+		{
+			E.printStackTrace();
+		}
 		return true;
 	}
 	public List<File> getAllForUser(int UserId)
