@@ -179,6 +179,11 @@ public class UserController
 		//System.out.println("currDir: " + currDir);
 		//System.out.println("dirType: " + dirType);
 		User user = uservice.getUser(Login);
+		List<Komentaz> k = fservice.GetAllCommentForFile(fileId);
+		for(Komentaz tmp : k)
+		{
+			fservice.DelComment(tmp); // Kasuj wszystkie komenta¿e nale¿¹ce do pliku (Klucz Obcy)
+		}
 		File f = fservice.getFile(user, fileId, currDir);
 		fservice.deleteFile(user, fileId);		
 		java.io.File file = new java.io.File(fservice.getUserBasicDirPath()+currDir+f.getNazwa());	
@@ -196,7 +201,7 @@ public class UserController
 	@RequestMapping(value = "/{Login}/updateFile", method = RequestMethod.POST)
 	public String updateFile(@ModelAttribute("file") File file, Model model,
 			@PathVariable String Login, @RequestParam("currDir") String currDir, 
-			@RequestParam("dirType") String dirType)
+			@RequestParam("dirType") String dirType,Principal pal)
 	{
 		User user = uservice.getUser(Login);
 		File oldFile = fservice.getFile(user, file.getId(), file.getLokalizacja().substring(
@@ -224,6 +229,7 @@ public class UserController
 		Komentaz k = new Komentaz();
 		model.addAttribute("Kom",k);
 		model.addAttribute("Login",Login);
+		model.addAttribute("p",pal.getName());
 		Map<Integer,String> UserIdMap = new HashMap<Integer, String>();
 		
 		for(Komentaz com : Comments)
