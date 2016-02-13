@@ -1,25 +1,31 @@
 package org.zut.dyskService;
 
 
-import java.io.File;
+import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.transaction.annotation.Transactional;
+import org.zut.dyskDAO.FileDAOImpl;
 import org.zut.dyskDAO.UserDaoImpl;
+import org.zut.dyskDomain.File;
 import org.zut.dyskDomain.User;
 
 public class UserServiceImpl implements UserService
 {
 	private UserDaoImpl userDao;
-	
+	private FileDAOImpl fileDao;
+	private String UserDirBasicPath;
+
 	public void setUserDao(UserDaoImpl userDao) {
 		this.userDao = userDao;
 	}
-	private String UserDirBasicPath;
-	
+	public void setFileDAO(FileDAOImpl fileDao) {
+		this.fileDao = fileDao;
+	}	
 	public void setUserDirBasicPath(String userDirBasicPath) {
 		UserDirBasicPath = userDirBasicPath;
 	}
@@ -31,13 +37,22 @@ public class UserServiceImpl implements UserService
 		int count = userDao.getLoginCount(u.getLogin());
 		if(count>0)return false;
 		boolean result =  userDao.addUser(u);
-		//Create User DIR at resources/users/user_login		
-		File f = new File(UserDirBasicPath + u.getLogin());
-		f.mkdir(); // Mkdir /ServerUsers/....Logi_ Name
-		File fpublic = new File(UserDirBasicPath+u.getLogin()+"/public");
-		fpublic.mkdir();
-		File fprivate = new File(UserDirBasicPath+u.getLogin()+"/private");
-		fprivate.mkdir();
+		File file = new File();
+		file.setFolder(true);
+		file.setSumaKontrolna(null);
+		file.setRozmiar(null);
+		file.setFormat(null);
+		file.setOpis(null);
+		file.setDataDodania(null);
+		file.setWlasciciel(userDao.getUser(u.getLogin()).getId());
+		file.setNazwa(u.getLogin());
+		file.setLokalizacja(UserDirBasicPath);
+		fileDao.addFile(u, file);
+		file.setNazwa("public");
+		file.setLokalizacja(UserDirBasicPath + u.getLogin()+"/");	
+		fileDao.addFile(u, file);
+		file.setNazwa("private");
+		fileDao.addFile(u, file);
 		return true ;
 	}
 
@@ -111,6 +126,17 @@ public class UserServiceImpl implements UserService
 		if(u == null)return false;
 		if(u.getHaslo().equals(Haslo))return true;
 		else return false;
+	}
+	@Override
+	public List<User> getAll() {
+		
+		// TODO Auto-generated method stub
+		return userDao.getAll();
+	}
+	@Override
+	public User GetUserById(int id) {
+		// TODO Auto-generated method stub
+		return userDao.GetUserById(id);
 	}
 
 }

@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ page session="false" %>
+
 
 <html>
 <head>
@@ -12,7 +12,7 @@
 <div id="strona">
 
 	<div id="naglowek">
-	nagwek
+		<img id="LogoDIV" src="${pageContext.request.contextPath}/resources/Images/file-server-300px.png" alt="Logo">
 	</div>
 	
 	<div id="menu_1">

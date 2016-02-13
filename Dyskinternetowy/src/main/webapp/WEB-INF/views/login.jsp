@@ -23,34 +23,15 @@
 	</div>
 	
 	<div id="menu_1">
-	menu 1
+	Szybkie Menu
 		<ul>
-			<li>link 1</li>
-			<li>link 2</li>
-			<li>link 3</li>
-			<li>link 4</li>
-			<li>link 5</li>
-			<li>link 6</li>
-			<li>link 7</li>
-			<li>link 8</li>
-			<li>link 9</li>
-			<li>link 10</li>
+			<li><a href="/dysk/register">Zarejestruj sie</a></li>
+			
 		</ul>
 	</div>
 	
 	<div id="menu_2">
-		<ul>
-			<li>link 11</li>
-			<li>link 12</li>
-			<li>link 13</li>
-			<li>link 14</li>
-			<li>link 15</li>
-			<li>link 16</li>
-			<li>link 17</li>
-			<li>link 18</li>
-			<li>link 19</li>
-			<li>link 20</li>
-		</ul>
+		<p>Miejsce na Reklame</p>
 	</div>
 	
 	<div id="zawartosc">	
@@ -87,9 +68,7 @@
 			<p>Nie masz Konta? <a href="/dysk/register/">Zajerestruj sie</a></p>
 		</div>
 	</div>
-	<div id="stopka">
-	stopka
-	</div>
+	<jsp:include page="/WEB-INF/views/stopka.jsp"></jsp:include>
 	
 </div>
 </body>

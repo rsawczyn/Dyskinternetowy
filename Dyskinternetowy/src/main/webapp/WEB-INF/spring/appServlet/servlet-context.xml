@@ -4,11 +4,13 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"	
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+		http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -24,24 +26,34 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	
+	<!-- 
 	<beans:bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<beans:property name="url" value="jdbc:mysql://localhost:3306/dysk" />
 		<beans:property name="username" value="root" />
 		<beans:property name="password" value="" />
 	</beans:bean>
+	-->
+	
+	
+	<jee:jndi-lookup id="dbDataSource" jndi-name="jdbc/DyskDB" expected-type="javax.sql.DataSource" />
 	
 	<beans:bean id="userdao" class="org.zut.dyskDAO.UserDaoImpl">
-		<beans:property name="data" ref="datasource"></beans:property>
+		<!-- <beans:property name="data" ref="datasource"></beans:property> -->
+	</beans:bean>
+	
+	<beans:bean id="filedao" class="org.zut.dyskDAO.FileDAOImpl">
+		<!-- <beans:property name="data" ref="datasource"></beans:property> -->
 	</beans:bean>
 	
 	<beans:bean id="userService" class="org.zut.dyskService.UserServiceImpl">
 		<beans:property name="userDao" ref="userdao"></beans:property>	
+		<beans:property name="fileDAO" ref="filedao"></beans:property>
 		<beans:property name="userDirBasicPath" value="${BasicPath}"></beans:property>	
 	</beans:bean>
 	
 	<beans:bean id="fileService" class="org.zut.dyskService.FileServiceImpl">
+		<beans:property name="fileDAO" ref="filedao"></beans:property>
 		<beans:property name="userBasicDirPath" value="${BasicPath}"></beans:property> <!-- Zmienna z basic.properties -->
 	</beans:bean>
 	
@@ -71,4 +83,10 @@
  	<global-method-security pre-post-annotations="enabled" jsr250-annotations="enabled" />
 	<context:component-scan base-package="org.zut.dysk,org.zut.dyskDAO,org.zut.dyskService,org.zut.dyskDomain,org.zut.dysk.config" />
 	<context:property-placeholder location="resources/basic.properties"/>
-</beans:beans>
+	
+	 <beans:bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+         <!-- setting maximum upload size -->
+        <beans:property name="maxUploadSize" value="5000000" />
+	 </beans:bean>
+ </beans:beans>
