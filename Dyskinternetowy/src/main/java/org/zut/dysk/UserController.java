@@ -453,17 +453,17 @@ public class UserController
 		return "ViewDirs";
 	}
 	
-	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
+/*	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
 	@RequestMapping(value = "{Login}/private", method = RequestMethod.GET)
 	public String Private(Model model,Principal sec, @RequestParam("currDir") String currDir,
 			@RequestParam("nextDir") String nextDir, @RequestParam("fileId") int fileId)
 	{
 		User user = uservice.getUser(sec.getName()); // principal
 		List<File> files= null;
-	/*	System.out.println("CurrDir: " +currDir);
-		System.out.println("NextDir: " +nextDir);
-		System.out.println("FileId: " +fileId);
-		System.out.println("UserId: " +user.getId()); */
+		//System.out.println("CurrDir: " +currDir);
+		//System.out.println("NextDir: " +nextDir);
+		//System.out.println("FileId: " +fileId);
+		//System.out.println("UserId: " +user.getId()); 
 		File file =fservice.getFile(user, fileId, currDir);
 		// jezeli jest plikiem
 		if( file.isFolder() == false){
@@ -489,8 +489,8 @@ public class UserController
 		else {
 			// jezeli jestesmy w nastepnym katalogu
 			if(nextDir != null) {
-				/*fservice.setCurrDir(fservice.getCurrDir().concat(nextDir));
-				files = fservice.getFiles(user, fservice.getCurrDir()); */
+				//fservice.setCurrDir(fservice.getCurrDir().concat(nextDir));
+				//files = fservice.getFiles(user, fservice.getCurrDir()); 
 				currDir += nextDir+"/";
 				//System.out.println("CurrDir: " +currDir);
 				files = fservice.getFiles(user, currDir);	
@@ -514,6 +514,7 @@ public class UserController
 		}
 		return "ViewDirs";
 	}
+	*/
 	
 	@PreAuthorize("hasRole('ROLE_NORMALUSER') && isAuthenticated()")
 	@RequestMapping(value = "/{Login}/downloadFile", method = RequestMethod.POST)
