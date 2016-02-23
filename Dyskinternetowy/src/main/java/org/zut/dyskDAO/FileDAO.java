@@ -17,4 +17,6 @@ public interface FileDAO {
 	public boolean AddComment(Komentaz k);
 	public List<Komentaz> GetAllCommentsForFile(int FileId);
 	public boolean DelComment(Komentaz k);
+	public File GetFileByLocation(String Location,User u);
+	
 }
