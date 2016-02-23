@@ -5,10 +5,13 @@ import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.transaction.annotation.Transactional;
+import org.zut.dysk.config.EmailFormatValidator;
 import org.zut.dyskDAO.FileDAOImpl;
 import org.zut.dyskDAO.UserDaoImpl;
 import org.zut.dyskDomain.File;
@@ -39,7 +42,7 @@ public class UserServiceImpl implements UserService
 		boolean result =  userDao.addUser(u);
 		File file = new File();
 		file.setFolder(true);
-		file.setSumaKontrolna(null);
+		file.setPlikPrywatny(false);
 		file.setRozmiar(null);
 		file.setFormat(null);
 		file.setOpis(null);
@@ -106,10 +109,14 @@ public class UserServiceImpl implements UserService
 			Valid= false;
 			Err.put("LoginError","Login Pusty lub Istnieje");
 		}
-		if(!(user.getEmail().length() >0))
+		EmailFormatValidator EmailValid = new EmailFormatValidator();
+		if(!(user.getEmail().length() >0) || !EmailValid.validate(user.getEmail()) )
 		{
+			
+			System.out.println("Checking Email....");			
 			Valid= false;
 			Err.put("EmailError","Niepoprawny Email");
+			
 			
 		}
 		if(Valid == false)

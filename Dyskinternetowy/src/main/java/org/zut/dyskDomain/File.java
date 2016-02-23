@@ -7,7 +7,7 @@ public class File {
 	private String Lokalizacja;
 	private boolean Folder;
 	private String Nazwa;
-	private String SumaKontrolna;
+	private boolean PlikPrywatny;
 	private String Rozmiar;
 	private String Format;
 	private int Wlasciciel;
@@ -41,11 +41,11 @@ public class File {
 	public void setNazwa(String nazwa) {
 		Nazwa = nazwa;
 	}
-	public String getSumaKontrolna() {
-		return SumaKontrolna;
+	public boolean getPlikPrywatny() {
+		return PlikPrywatny;
 	}
-	public void setSumaKontrolna(String sumaKontrolna) {
-		SumaKontrolna = sumaKontrolna;
+	public void setPlikPrywatny(boolean plikPrywatny) {
+		PlikPrywatny = plikPrywatny;
 	}
 	public String getRozmiar() {
 		return Rozmiar;
